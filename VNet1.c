@@ -36,7 +36,7 @@ typedef struct {
   Share beta_shares[USERS_SIZE]; // shares of User's beta
   Share Nsk_shares[USERS_SIZE];  // shares of User's Nsk
 
-  unsigned long plainLocalVector[GRAD_SIZE];
+  uint32_t plainLocalVector[GRAD_SIZE];
 
   mpz_t P_sk;
   mpz_t P_pk;
@@ -388,7 +388,7 @@ void VNET_Mask(DscVNet *vnet) {
     mpz_powm(dinv, vnet->d, exponent, vnet->bgrp.order);
     mpz_clear(exponent);
     mpz_init(s_ij);
-    unsigned long *prgArray = malloc(GRAD_SIZE * sizeof(unsigned long));
+    uint32_t *prgArray = malloc(GRAD_SIZE * sizeof(uint32_t));
     mpz_t *xn = malloc(sizeof(mpz_t) * GRAD_SIZE);
 
     for (int j = 0; j < GRAD_SIZE; j++) {
@@ -411,7 +411,7 @@ void VNET_Mask(DscVNet *vnet) {
       if (z == i || vnet->Uact2[z] == 0)
         continue;
       // Mask Gradient prgArray = G(s_i,z)
-      PRG((uint8_t *)prgArray, GRAD_SIZE * sizeof(unsigned long),
+      PRG((uint8_t *)prgArray, GRAD_SIZE * sizeof(uint32_t),
           vnet->Users[i].sdata[z].val);
       if (z > i) {
         for (int j = 0; j < GRAD_SIZE; j++) {
@@ -437,7 +437,7 @@ void VNET_Mask(DscVNet *vnet) {
     size_t betaMaskedSize =
         mpz_to_byteArray(&betaMasked, vnet->Users[i].betaMasked);
     padWithZero(&betaMasked, betaMaskedSize, 32);
-    PRG((uint8_t *)prgArray, GRAD_SIZE * sizeof(unsigned long),
+    PRG((uint8_t *)prgArray, GRAD_SIZE * sizeof(uint32_t),
         (uint8_t *)betaMasked);
     free(betaMasked);
 
@@ -595,7 +595,7 @@ void VNET_UNMask(DscVNet *vnet) {
     printf("\nUnmask: not enough users to continue\n");
     exit(1);
   }
-  unsigned long *prgArray = malloc(vnet->grdSize * sizeof(unsigned long));
+  uint32_t *prgArray = malloc(vnet->grdSize * sizeof(uint32_t));
   int t; // variale for counting number of shares retrieved
   vnet->gradGlobalVector = malloc(vnet->grdSize * sizeof(mpz_t));
   for (int k = 0; k < GRAD_SIZE; k++) {
@@ -622,7 +622,7 @@ void VNET_UNMask(DscVNet *vnet) {
         vnet->thss.recovered_secret); // vnet->thss.recovered_secret);//beta
 
     padWithZero(&betaMasked, betaMaskedSize, 32);
-    PRG((uint8_t *)prgArray, GRAD_SIZE * sizeof(unsigned long),
+    PRG((uint8_t *)prgArray, GRAD_SIZE * sizeof(uint32_t),
         (uint8_t *)betaMasked);
     free(betaMasked);
     for (int j = 0; j < GRAD_SIZE; j++) {
@@ -663,7 +663,7 @@ void VNET_UNMask(DscVNet *vnet) {
       free(temp);
 
       // Mask Gradient prgArray = G(s_i,z)
-      PRG((uint8_t *)prgArray, GRAD_SIZE * sizeof(unsigned long),
+      PRG((uint8_t *)prgArray, GRAD_SIZE * sizeof(uint32_t),
           vnet->Users[i].sdata[z].val);
 
       if (z > i) {
@@ -856,7 +856,7 @@ int main() {
   DscVNet *vnet;
   DscTimeMeasure timemeasure;
   vnet = malloc(sizeof(DscVNet));
-  uint32_t size = GRAD_SIZE * sizeof(unsigned long);
+  uint32_t size = GRAD_SIZE * sizeof(uint32_t);
 
   printf("\n** Dropout = %f, n = %d, gradient size: %d, iterations: %d**\n",
          (float)DropOut, USERS_SIZE, GRAD_SIZE, ITERATIONS);
