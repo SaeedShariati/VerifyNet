@@ -5,6 +5,8 @@ programName
 *.so
 *.out
 *.exe
+*.log
+*.sh
 
 # Build directories
 build/
