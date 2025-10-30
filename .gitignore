@@ -7,7 +7,7 @@ programName
 *.exe
 *.log
 *.sh
-
+*.zip
 # Build directories
 build/
 bin/
