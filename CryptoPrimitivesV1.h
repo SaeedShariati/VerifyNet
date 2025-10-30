@@ -206,7 +206,7 @@ typedef struct{
     long seconds;
     long milliseconds;
     long microseconds;
-    long nanoseconds;
+    int64_t nanoseconds;
 }DscTimeMeasure;
 /*===========================================================================================*/
 /*============================ Space measurement structure ==================================*/
